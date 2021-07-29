@@ -68,3 +68,60 @@
                         <div class="loadesr">
                             Sedang mengunduh...
                         </div>`);
+        
+                    $.ajax({
+                        url: 'https://api.andsp.id/api/ytdl.php',
+                        data: formData,
+                        type: 'POST',
+                        headers: {'x-anp-ytdl': true, 'x-token-ytdl': token},
+                        success: (output) => {
+                            btdw.text('Unduh');
+                            btdw.prop('disabled', false);
+                            txdw.prop('disabled', false);
+                            
+                            if (output === '')
+                                content = '<div class="error">Tidak ada video yang diunduh.</div>';
+                            else if (output.error)
+                                content = `<div class="error">${output.message}</div>`;
+                            else 
+                            {
+                                const json   = output.output_response,
+                                arrvideo     = json.videos;
+        
+                                if (arrvideo.length > 0)
+                                {
+                                    $.each(arrvideo, (no, format) => {
+                                        dw_video += `<div class="li-dw">
+                                                        <a href="${format.url}" target="_blank">Unduh Sekarang</a><br/>
+                                                        ( ${format.ext} | ${format.filesize} | Audio: ${format.audio.audio ? '<span class="c">✓</span>' : '<span class="x">✕</span>'} | Video: ${format.audio.video ? '<span class="c">✓</span>' : '<span class="x">✕</span>'} )
+                                                    </div>`;
+                                    });
+                                } else dw_video = 'Tidak ada video yang diunduh.';
+                                
+                                content = `
+                                    <div style="margin: 0 auto; max-width: 450px">
+                                        <h2>${json.title}</h2>
+                                        <div style="text-align: center">
+                                            <img src="${json.thumbnail}" alt="Thumbnail Video" class="thumbnail" /><br/>
+                                            <div style="margin: 8px 0">
+                                                Durasi: ${json.duration} | Suka: ${json.like} | Tidak suka: ${json.dislike}
+                                            </div>
+                                    </div><br/>
+
+                                    <b>Daftar Unduhan</b>
+                                    ${dw_video}`;
+                            }
+
+                            hasildw.html(`<br/><hr/><br/>${content}`);
+                        },
+                        error: (ajax, textStatus, error) => {
+                            btdw.prop('disabled', false);
+                            txdw.prop('disabled', false);
+                            hasildw.html('<br/><hr/><br/><div class="error">Terjadi kesalahan, silahkan muat ulang halaman Anda.</div>');
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
