@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Youtube Downloader v0.1</title>
+        <meta charset="UTF-8">
+        <meta content="width=device-width,initial-scale=1" name="viewport">
+
+        <style type="text/css">
+            body {padding: 20px;margin: 0;background: #f8f8f8;font-size: 15px;}
+            a {color: #c4302b;text-decoration: none;}
+            label {margin: 5px;display: block;}
+            .txtdw, .btndw {padding: 12px;border: 1px solid #ccc;border-radius: 20px}
+            .txtdw {width: 92.8%;display: block;margin-bottom: 8px;color: #999}
+            .btndw {width: 30%;background: #c4302b;color:#fff;font-weight: bold;cursor:pointer}
+            .btndw:hover {background: #d33630}
+            .btndw:disabled {background: #e75954}
+            .div-dw {background:#fff;border:1px solid #ccc;max-width: 400px;margin: 40px auto;padding: 20px;box-shadow: 0 0 10px #ddd}
+            .div-dw .title {text-align: center;margin-bottom: 2.2em;border-bottom:1px dashed #ccc;font-family: 'Dancing Script', cursive;padding: 20px 0}
+            .div-dw .title h1 {font-size: 35px;margin: 0;padding:0}
+            .loader {text-align: center}
+            .loader img {width: 250px}
+            .error {padding: 12px 15px;color: #842029;background-color: #f8d7da;border-color: #f5c2c7}
+            .li-dw {margin: 20px 0;border-bottom: 1px dashed #ccc;padding: 10px 0}
+            .li-dw:last-child {border-bottom: none}
+            .c {color: rgb(1, 182, 1)}
+            .x {color: red}
+            .c, .x {font-weight: bold}
+            .thumbnail {width: 100%;max-width: 300px;height: auto}
+            .footer {max-width: 400px;margin: 30px auto;text-align: center;}
+        </style>
+    </head>
+    <body>
+        <div class="div-dw">
+            <div class="title"><h1>Youtube Downloader</h1></div>
+            <form method="post" class="form-download">
+                <label>Masukan URL Video</label>
+                <input type="text" class="txtdw" name="url" placeholder="Contoh: https://www.youtube.com/watch?v=NUTGr5t3MoY" />
+                <button class="btndw">Unduh</button>
+            </form>
+            <div class="hasil_download" style="text-align: left"></div><br/>
+        </div>
+        <div class="footer">
+            Copyright &copy; 2021 <a href="#">Youtube Downloader v0.1</a> <br/>
+            Dikembangkan oleh <a href="https://www.andsp.id" target="_blank">Andsp.ID</a>. All Rights Reserved
+        </div>
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                let content = dw_video = '';
+                const fmDw  = $('.form-download');
+                
+                fmDw.submit((e) => {
+                    e.preventDefault();
+
+                    const btdw  = $('.btndw'),
+                    txdw        = $('.txtdw'),
+                    hasildw     = $('.hasil_download'),
+                    token       = '98a12515d2d44e9fde87f19e0aeccd49',
+                    formData    = fmDw.serialize();
+
+                    btdw.text('Unduh');
+                    btdw.prop('disabled', true);
+                    txdw.prop('disabled', true);
+
+                    hasildw.html(`
+                        <br/><hr/><br/>
+                        <div class="loadesr">
+                            Sedang mengunduh...
+                        </div>`);
